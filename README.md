@@ -48,7 +48,7 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 
 ![Screenshot 2024-12-02 010726.png](Screenshot%202024-12-02%20010726.png)
 
-![Screenshot 2024-12-01 234033](Screenshot 2024-12-01 234033.png)
+![Screenshot 2024-12-01 234033.png](Screenshot%202024-12-01%20234033.png)
 
 
 
