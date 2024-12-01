@@ -46,11 +46,9 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 
 - **笔记搜索功能**：展示了搜索框以及搜索结果的界面。
 
-  ![Screenshot 2024-12-02 003151](D:\AndroidDemo\NotePad_new-master\Screenshot 2024-12-02 003151.png)
-  
-  
+ ![Screenshot 2024-12-02 003151](Screenshot 2024-12-02 003151)
 
-![Screenshot 2024-12-01 234033](D:\AndroidDemo\NotePad_new-master\Screenshot 2024-12-01 234033.png)
+![Screenshot 2024-12-01 234033](Screenshot 2024-12-01 234033)
 
 
 
