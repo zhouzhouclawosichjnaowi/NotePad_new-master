@@ -46,11 +46,11 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 
 - **笔记搜索功能**：展示了搜索框以及搜索结果的界面。
 
-  ![image-20241202003154222](C:\Users\konglingwen\AppData\Roaming\Typora\typora-user-images\image-20241202003154222.png)
+  ![Screenshot 2024-12-02 003151](D:\AndroidDemo\NotePad_new-master\Screenshot 2024-12-02 003151.png)
+  
+  
 
-![Screenshot 2024-12-01 234033](C:\Users\konglingwen\OneDrive\图片\屏幕快照\Screenshot 2024-12-01 234033.png)
-
-
+![Screenshot 2024-12-01 234033](D:\AndroidDemo\NotePad_new-master\Screenshot 2024-12-01 234033.png)
 
 
 
