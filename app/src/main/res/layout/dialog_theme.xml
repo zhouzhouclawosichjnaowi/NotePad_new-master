@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <RadioGroup
+        android:id="@+id/theme_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/theme_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="默认主题"
+            android:padding="12dp"
+            android:textSize="16sp"/>
+
+        <RadioButton
+            android:id="@+id/theme_blue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="蓝色主题" />
+
+        <RadioButton
+            android:id="@+id/theme_green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="绿色主题" />
+
+        <RadioButton
+            android:id="@+id/theme_pink"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="粉色主题" />
+
+        <RadioButton
+            android:id="@+id/theme_purple"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="紫色主题" />
+
+        <RadioButton
+            android:id="@+id/theme_orange"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="橙色主题" />
+    </RadioGroup>
+</LinearLayout> 

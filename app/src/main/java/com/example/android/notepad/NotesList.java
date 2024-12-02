@@ -38,6 +38,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 /**
  * Displays a list of notes. Will display notes from the {@link Uri}
@@ -60,17 +61,20 @@ public class NotesList extends ListActivity {
     private static final String[] PROJECTION = new String[] {
             NotePad.Notes._ID, // 0
             NotePad.Notes.COLUMN_NAME_TITLE, // 1
-
-
-
+            NotePad.Notes.COLUMN_NAME_NOTE,  // 添加笔记内容列
             NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,//添加修改时间
-
-
-
+            NotePad.Notes.COLUMN_NAME_CATEGORY
     };
 
     /** The index of the title column */
     private static final int COLUMN_INDEX_TITLE = 1;
+
+    // 添加排序常量
+    private static final String SORT_ORDER_ASC = NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " ASC";
+    private static final String SORT_ORDER_DESC = NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " DESC";
+    
+    // 当前排序方式
+    private String currentSortOrder = NotePad.Notes.DEFAULT_SORT_ORDER;
 
     /**
      * onCreate is called when Android starts this Activity from scratch.
@@ -112,7 +116,7 @@ public class NotesList extends ListActivity {
             PROJECTION,                       // Return the note ID and title for each note.
             null,                             // No where clause, return all records.
             null,                             // No where clause, therefore no where column values.
-            NotePad.Notes.DEFAULT_SORT_ORDER  // Use the default sort order.
+            currentSortOrder  // Use the default sort order.
         );
 
         /*
@@ -125,10 +129,10 @@ public class NotesList extends ListActivity {
 
         // The names of the cursor columns to display in the view, initialized to the title column
 //        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE}  ;//加入修改时间
-        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE} ;//NotePad.Notes.COLUMN_NAME_NOTE?
+        String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, NotePad.Notes.COLUMN_NAME_CATEGORY} ;//NotePad.Notes.COLUMN_NAME_NOTE?
         // The view IDs that will display the cursor columns, initialized to the TextView in
         // noteslist_item.xml
-        int[] viewIDs = { android.R.id.text1, R.id.text2};//加入修改时间
+        int[] viewIDs = { android.R.id.text1, R.id.text_preview, R.id.text2, R.id.text_category};//加入修改时间
 
         // Creates the backing adapter for the ListView.
         SimpleCursorAdapter adapter
@@ -139,6 +143,27 @@ public class NotesList extends ListActivity {
                       dataColumns,
                       viewIDs
               );
+
+        // Sets the ViewBinder to handle content preview display
+        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                if (view.getId() == R.id.text_preview) {
+                    // Get note content
+                    String content = cursor.getString(columnIndex);
+                    if (content != null) {
+                        // Remove newline characters and limit length
+                        content = content.replaceAll("\n", " ");
+                        if (content.length() > 100) {
+                            content = content.substring(0, 100) + "...";
+                        }
+                        ((TextView) view).setText(content);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
 
         // Sets the ListView's adapter to be the cursor adapter that was just created.
         setListAdapter(adapter);
@@ -293,6 +318,14 @@ public class NotesList extends ListActivity {
                 this.startActivity(intent);
                 return true;
 
+            case R.id.menu_sort_asc:
+                currentSortOrder = SORT_ORDER_ASC;
+                refreshList();
+                return true;
+            case R.id.menu_sort_desc:
+                currentSortOrder = SORT_ORDER_DESC;
+                refreshList();
+                return true;
 
             default:
             return super.onOptionsItemSelected(item);
@@ -479,5 +512,61 @@ public class NotesList extends ListActivity {
             // Intent's data is the note ID URI. The effect is to call NoteEdit.
             startActivity(new Intent(Intent.ACTION_EDIT, uri));
         }
+    }
+
+    // 添加刷新列表的方法
+    private void refreshList() {
+        // 使用新的排序方式重新查询数据
+        Cursor cursor = managedQuery(
+            getIntent().getData(),
+            PROJECTION,
+            null,
+            null,
+            currentSortOrder
+        );
+
+        // 更新适配器
+        String[] dataColumns = { 
+            NotePad.Notes.COLUMN_NAME_TITLE,
+            NotePad.Notes.COLUMN_NAME_NOTE,
+            NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
+            NotePad.Notes.COLUMN_NAME_CATEGORY
+        };
+        
+        int[] viewIDs = { 
+            android.R.id.text1,
+            R.id.text_preview,
+            R.id.text2,
+            R.id.text_category
+        };
+
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+            this,
+            R.layout.noteslist_item,
+            cursor,
+            dataColumns,
+            viewIDs
+        );
+
+        // 设置 ViewBinder 处理内容预览
+        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                if (view.getId() == R.id.text_preview) {
+                    String content = cursor.getString(columnIndex);
+                    if (content != null) {
+                        content = content.replaceAll("\n", " ");
+                        if (content.length() > 100) {
+                            content = content.substring(0, 100) + "...";
+                        }
+                        ((TextView) view).setText(content);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        setListAdapter(adapter);
     }
 }

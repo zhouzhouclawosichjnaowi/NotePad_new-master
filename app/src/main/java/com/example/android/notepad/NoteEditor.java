@@ -17,6 +17,7 @@
 package com.example.android.notepad;
 
 import android.app.Activity;
+
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -24,19 +25,26 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -81,11 +89,16 @@ public class NoteEditor extends Activity {
     private Cursor mCursor;
     private EditText mText;
     private String mOriginalContent;
+    private Button changeThemeButton;
+
+    private static final int MENU_THEME = Menu.FIRST + 5;
+    private static final int MENU_CATEGORY = Menu.FIRST + 6;
+    private String[] categories = {"工作", "生活", "学习"};
 
     /**
      * Defines a custom EditText View that draws lines between each line of text that is displayed.
      */
-    public static class LinedEditText extends EditText {
+    public static class LinedEditText extends androidx.appcompat.widget.AppCompatEditText {
         private Rect mRect;
         private Paint mPaint;
 
@@ -232,6 +245,7 @@ public class NoteEditor extends Activity {
         // Gets a handle to the EditText in the the layout.
         mText = (EditText) findViewById(R.id.note);
 
+
         /*
          * If this Activity had stopped previously, its state was written the ORIGINAL_CONTENT
          * location in the saved Instance state. This gets the state.
@@ -239,6 +253,11 @@ public class NoteEditor extends Activity {
         if (savedInstanceState != null) {
             mOriginalContent = savedInstanceState.getString(ORIGINAL_CONTENT);
         }
+
+        // 恢复保存的主题
+        SharedPreferences sp = getSharedPreferences("NoteTheme", MODE_PRIVATE);
+        int savedTheme = sp.getInt("theme_color", R.color.theme_default);
+        updateTheme(savedTheme);
     }
 
     /**
@@ -307,21 +326,6 @@ public class NoteEditor extends Activity {
             setTitle(getText(R.string.error_title));
             mText.setText(getText(R.string.error_message));
         }
-    }
-
-    /**
-     * This method is called when an Activity loses focus during its normal operation, and is then
-     * later on killed. The Activity has a chance to save its state so that the system can restore
-     * it.
-     *
-     * Notice that this method isn't a normal part of the Activity lifecycle. It won't be called
-     * if the user simply navigates away from the Activity.
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        // Save away the original text, so we still have it if the activity
-        // needs to be killed while paused.
-        outState.putString(ORIGINAL_CONTENT, mOriginalContent);
     }
 
     /**
@@ -407,6 +411,16 @@ public class NoteEditor extends Activity {
                     new ComponentName(this, NoteEditor.class), null, intent, 0, null);
         }
 
+        menu.add(0, MENU_THEME, 0, R.string.menu_theme)
+            .setIcon(android.R.drawable.ic_menu_manage);
+        
+        // 添加分类菜单
+        SubMenu categoryMenu = menu.addSubMenu(0, MENU_CATEGORY, 0, "分类")
+            .setIcon(android.R.drawable.ic_menu_agenda);
+        for (int i = 0; i < categories.length; i++) {
+            categoryMenu.add(0, MENU_CATEGORY + i + 1, 0, categories[i]);
+        }
+        
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -449,6 +463,18 @@ public class NoteEditor extends Activity {
         case R.id.menu_revert:
             cancelNote();
             break;
+        case MENU_THEME:
+            showThemeDialog();
+            return true;
+        }
+        if (item.getItemId() >= MENU_CATEGORY + 1 && 
+            item.getItemId() < MENU_CATEGORY + categories.length + 1) {
+            // 更新笔记分类
+            String category = categories[item.getItemId() - MENU_CATEGORY - 1];
+            ContentValues values = new ContentValues();
+            values.put(NotePad.Notes.COLUMN_NAME_CATEGORY, category);
+            getContentResolver().update(mUri, values, null, null);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -632,5 +658,75 @@ public class NoteEditor extends Activity {
             getContentResolver().delete(mUri, null, null);
             mText.setText("");
         }
+    }
+
+    private void showThemeDialog() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_theme, null);
+        RadioGroup radioGroup = dialogView.findViewById(R.id.theme_radio_group);
+        
+        SharedPreferences sp = getSharedPreferences("NoteTheme", MODE_PRIVATE);
+        int currentTheme = sp.getInt("theme_color", R.color.theme_default);
+        
+        switch (currentTheme) {
+            case R.color.theme_blue:
+                radioGroup.check(R.id.theme_blue);
+                break;
+            case R.color.theme_green:
+                radioGroup.check(R.id.theme_green);
+                break;
+            case R.color.theme_pink:
+                radioGroup.check(R.id.theme_pink);
+                break;
+            case R.color.theme_purple:
+                radioGroup.check(R.id.theme_purple);
+                break;
+            case R.color.theme_orange:
+                radioGroup.check(R.id.theme_orange);
+                break;
+            default:
+                radioGroup.check(R.id.theme_default);
+        }
+
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle(R.string.dialog_theme_title)
+               .setView(dialogView)
+               .setPositiveButton("确定", (dialog, which) -> {
+                   int selectedTheme = R.color.theme_default;
+                   int checkedId = radioGroup.getCheckedRadioButtonId();
+                   
+                   switch (checkedId) {
+                       case R.id.theme_blue:
+                           selectedTheme = R.color.theme_blue;
+                           break;
+                       case R.id.theme_green:
+                           selectedTheme = R.color.theme_green;
+                           break;
+                       case R.id.theme_pink:
+                           selectedTheme = R.color.theme_pink;
+                           break;
+                       case R.id.theme_purple:
+                           selectedTheme = R.color.theme_purple;
+                           break;
+                       case R.id.theme_orange:
+                           selectedTheme = R.color.theme_orange;
+                           break;
+                   }
+                   
+                   SharedPreferences.Editor editor = sp.edit();
+                   editor.putInt("theme_color", selectedTheme);
+                   editor.apply();
+                   
+                   updateTheme(selectedTheme);
+               })
+               .setNegativeButton("取消", null)
+               .show();
+    }
+
+    private void updateTheme(int colorResId) {
+        View rootView = findViewById(android.R.id.content);
+        rootView.setBackgroundColor(getResources().getColor(colorResId));
+        
+        EditText editor = findViewById(R.id.note);
+        editor.setBackgroundColor(getResources().getColor(colorResId));
     }
 }

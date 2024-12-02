@@ -66,7 +66,7 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
     /**
      * The database version
      */
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     /**
      * A projection map used to select columns from the database
@@ -159,6 +159,11 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
                 NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
                 NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE);
 
+        // Maps "category" to "category"
+        sNotesProjectionMap.put(
+            NotePad.Notes.COLUMN_NAME_CATEGORY,
+            NotePad.Notes.COLUMN_NAME_CATEGORY);
+
         /*
          * Creates an initializes a projection map for handling Live Folders
          */
@@ -199,7 +204,8 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
                    + NotePad.Notes.COLUMN_NAME_TITLE + " TEXT,"
                    + NotePad.Notes.COLUMN_NAME_NOTE + " TEXT,"
                    + NotePad.Notes.COLUMN_NAME_CREATE_DATE + " INTEGER,"
-                   + NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER"
+                   + NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER,"
+                   + NotePad.Notes.COLUMN_NAME_CATEGORY + " TEXT DEFAULT '工作'"
                    + ");");
        }
 
@@ -218,7 +224,7 @@ public class NotePadProvider extends ContentProvider implements PipeDataWriter<C
                    + newVersion + ", which will destroy all old data");
 
            // Kills the table and existing data
-           db.execSQL("DROP TABLE IF EXISTS notes");
+           db.execSQL("DROP TABLE IF EXISTS " + NotePad.Notes.TABLE_NAME);
 
            // Recreates the database with a new version
            onCreate(db);

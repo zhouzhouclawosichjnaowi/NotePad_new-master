@@ -20,6 +20,7 @@
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.notepad" >
 
     <application android:icon="@drawable/app_notes"
@@ -31,12 +32,15 @@
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
-        <activity android:name="NotesList" android:label="@string/title_notes_list">
+        <activity android:name="NotesList"
+            android:exported="true"
+            android:label="@string/title_notes_list">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:scheme="http"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="android.intent.action.PICK" />
@@ -51,13 +55,16 @@
         </activity>
 
         <activity android:name="NoteEditor"
+            android:exported="true"
             android:theme="@android:style/Theme.Holo.Light"
             android:screenOrientation="sensor"
             android:configChanges="keyboardHidden|orientation"
         >
             <!-- This filter says that we can view or edit the data of
                  a single note -->
-            <intent-filter android:label="@string/resolve_edit">
+            <intent-filter android:label="@string/resolve_edit"
+                android:scheme="http"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="com.android.notepad.action.EDIT_NOTE" />
@@ -79,6 +86,7 @@
         </activity>
 
         <activity android:name="TitleEditor"
+            android:exported="true"
             android:label="@string/title_edit_title"
             android:icon="@drawable/ic_menu_edit"
             android:theme="@android:style/Theme.Holo.Dialog"
@@ -105,7 +113,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="NotesLiveFolder" android:label="@string/live_folder_name"
+        <activity android:name="NotesLiveFolder" android:exported="true" android:label="@string/live_folder_name"
             android:icon="@drawable/live_folder_notes">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
@@ -114,6 +122,7 @@
         </activity>
 
         <activity android:name=".NoteSearch"
+            android:exported="true"
             android:label="@string/note_search_label"
             android:icon="@drawable/note_search_icon">
             <intent-filter>

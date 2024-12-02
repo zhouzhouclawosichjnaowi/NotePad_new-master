@@ -1,29 +1,55 @@
-<RelativeLayout
-    android:layout_height="wrap_content"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/note_list_item_bg"
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="4dp">
 
+    <TextView
+        android:id="@+id/text_category"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp"
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary"
+        android:background="#F5F5F5"/>
 
-    <!-- 标题 TextView -->
     <TextView
         android:id="@android:id/text1"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/listPreferredItemHeight"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:gravity="center_vertical"
-        android:paddingLeft="5dp"
-        android:singleLine="true"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/text_category"
+        android:layout_marginEnd="8dp"
+        android:textSize="18sp"
+        android:textColor="@color/text_primary"
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
-    />
-
-    <!-- 第二个 TextView (可能是描述或内容) -->
+    <!-- 笔记内容预览 -->
     <TextView
-        android:id="@+id/text2"
+        android:id="@+id/text_preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="5dp"
-        android:singleLine="true"
-        android:gravity="center_vertical"
-        android:layout_below="@id/text2"
-    />
+        android:layout_below="@android:id/text1"
+        android:layout_marginTop="8dp"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+    <!-- 修改时间 TextView -->
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/text_preview"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:textColor="@color/text_secondary"/>
+
 </RelativeLayout>

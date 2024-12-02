@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="theme_default">#FFFFFF</color>
+    <color name="theme_blue">#E3F2FD</color>
+    <color name="theme_green">#E8F5E9</color>
+    <color name="theme_pink">#FCE4EC</color>
+    <color name="theme_purple">#F3E5F5</color>
+    <color name="theme_orange">#FFF3E0</color>
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#666666</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="background">#F5F5F5</color>
+    <color name="white">#FFFFFF</color>
+</resources>

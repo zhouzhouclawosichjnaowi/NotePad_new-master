@@ -22,4 +22,19 @@
         android:title="search">
     </item>
 
+    <item
+        android:id="@+id/menu_sort"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
+        android:title="@string/menu_sort"
+        android:showAsAction="ifRoom">
+        <menu>
+            <item
+                android:id="@+id/menu_sort_asc"
+                android:title="@string/menu_sort_asc"/>
+            <item
+                android:id="@+id/menu_sort_desc"
+                android:title="@string/menu_sort_desc"/>
+        </menu>
+    </item>
+
 </menu>
