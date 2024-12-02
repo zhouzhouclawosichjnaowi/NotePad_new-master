@@ -41,27 +41,32 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 ### 显示时间戳
 
 在 `note_list_item.xml` 布局文件中，为每个笔记条目添加了一个新的 TextView 用于显示时间戳。
+
 ![Screenshot 2024-12-02 010726.png](Screenshot%202024-12-02%20010726.png)
 
 ### 笔记查询功能
 
 在 `NoteList.java` 中添加了搜索框和相应的查询逻辑，使用 SQL LIKE 语句匹配标题或内容。
+
 ![Screenshot 2024-12-01 234033.png](Screenshot%202024-12-01%20234033.png)
 
 ### UI 美化
 
 对 `note_list_item.xml` 和 `note_editor.xml` 布局文件进行了修改，包括字体大小、颜色和边距的调整。
+
 ![Screenshot 2024-12-02 170040.png](Screenshot%202024-12-02%20170040.png)
 
 ### 笔记排序
 
 在 `NoteList.java` 中实现了排序功能，用户可以通过界面上的选项来选择排序方式。
+
 ![Screenshot 2024-12-02 170045.png](Screenshot%202024-12-02%20170045.png)
 ![Screenshot 2024-12-02 170049.png](Screenshot%202024-12-02%20170049.png)
 
 ### 更换背景
 
 允许用户从预设的背景图库中选择或上传自定义图片作为编辑界面背景。
+
 ![Screenshot 2024-12-02 170109.png](Screenshot%202024-12-02%20170109.png)
 ![Screenshot 2024-12-02 170116.png](Screenshot%202024-12-02%20170116.png)
 ![Screenshot 2024-12-02 170134.png](Screenshot%202024-12-02%20170134.png)
@@ -69,9 +74,11 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 
 ### 笔记分类
 在数据库模型中添加了分类字段，并在 UI 中提供了分类选项。
+
 ![Screenshot 2024-12-02 172849.png](Screenshot%202024-12-02%20172849.png)
 
 ### 笔记预览
 修改了笔记列表的 UI，使每个条目可以显示更多的内容预览。
+
 ![Screenshot 2024-12-02 172857.png](Screenshot%202024-12-02%20172857.png)
 ![Screenshot 2024-12-02 172916.png](Screenshot%202024-12-02%20172916.png)
