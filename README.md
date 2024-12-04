@@ -22,15 +22,83 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 ### 基本功能
 
 - **显示时间戳**：在 NoteList 界面中，每个笔记条目现在都会显示最后修改的时间戳。
+   ```xml
+   <!-- note_list_item.xml -->
+   <TextView
+       android:id="@+id/timestamp"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textAppearance="?android:attr/textAppearanceSmall"
+       android:textColor="#999"/>
+   ```
 - **笔记查询功能**：用户可以根据笔记的标题或内容进行搜索，快速找到相关笔记。
+   ```java
+   // NoteList.java
+   public void searchNotes(String query) {
+       Cursor noteSearch = getContentResolver().query(
+           Notes.CONTENT_URI,
+           new String[] { Notes.COLUMN_NAME_TITLE, Notes.COLUMN_NAME_NOTE },
+           Notes.COLUMN_NAME_TITLE + " LIKE '%" + query + "%' OR " +
+           Notes.COLUMN_NAME_NOTE + " LIKE '%" + query + "%'",
+           null,
+           null);
+       adapter.changeCursor(noteSearch);
+   }
+   ```
 
 ### 扩展功能
 
 - **UI 美化**：更新了笔记列表和编辑界面的 UI，使其更现代化，提供更好的用户体验。
+   ```xml
+   <!-- note_list_item.xml -->
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:textSize="18sp"
+       android:textColor="#333"
+       android:padding="16dp"/>
+   ```
 - **笔记分类**：用户可以根据不同的类别对笔记进行分类，方便管理和查找。
+   ```java
+   // NoteList.java
+   public void categorizeNote(int categoryId) {
+       ContentValues values = new ContentValues();
+       values.put(Notes.COLUMN_NAME_CATEGORY_ID, categoryId);
+       getContentResolver().update(Notes.CONTENT_URI, values, null, null);
+   }
+   ```
 - **更换背景**：用户可以自定义笔记编辑界面的背景，增加个性化体验。
+   ```xml
+   <!-- note_editor.xml -->
+   <RelativeLayout
+       android:background="@drawable/custom_background">
+       ...
+   </RelativeLayout>
+   ```
 - **笔记排序**：支持按照时间、标题等多种方式对笔记进行排序。
+   ```java
+   // NoteList.java
+   public void sortNotes(String sortBy) {
+       Cursor sortedNotes = getContentResolver().query(
+           Notes.CONTENT_URI,
+           new String[] { Notes.COLUMN_NAME_TITLE, Notes.COLUMN_NAME_MODIFICATION_DATE },
+           null,
+           null,
+           sortBy);
+       adapter.changeCursor(sortedNotes);
+   }
+   ```
 - **笔记预览**：在笔记列表界面，用户可以快速预览笔记的部分内容。
+   ```xml
+   <!-- note_list_item.xml -->
+   <TextView
+       android:id="@+id/preview"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textAppearance="?android:attr/textAppearanceSmall"
+       android:textColor="#666"
+       android:maxLines="2"/>
+   ```
 
 ## 技术实现
 
@@ -82,3 +150,4 @@ NotePad 扩展应用是基于原始 Android NotePad 应用的改进版本，增�
 
 ![Screenshot 2024-12-02 172857.png](Screenshot%202024-12-02%20172857.png)
 ![Screenshot 2024-12-02 172916.png](Screenshot%202024-12-02%20172916.png)
+
